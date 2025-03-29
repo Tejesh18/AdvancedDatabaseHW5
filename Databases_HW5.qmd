@@ -1,0 +1,220 @@
+---
+title: "HW5 - Getting started with SQL"
+author: 
+  - Tejesh Annavarapu
+  - Srujan Katukam
+  - Anumandla Muralidhar Reddy
+  - Ajaykumar Reddy Rachala
+format: html
+toc: true
+toc-depth: 3
+---
+
+# **CMSC 608 - Advanced Database**
+### **Instructor:** Thomas Gyeera
+
+## **GitHub Repository**
+👉 **[AdvancedDatabaseHW5 Repository](https://github.com/Tejesh18/AdvancedDatabaseHW5)**
+
+# Customer Shopping Database  
+
+## 1. General Description of the Database  
+
+The `Customer_shopping` database is designed to store and manage data for a customer shopping system. It includes three core entities:  
+
+1. **Customers**: Stores demographic information about each customer, such as name, email, and join date.  
+2. **Products**: Contains details about available products, including name, price, category, and description.  
+3. **Purchases**: Records transactional data, linking customers to the products they buy, along with purchase dates, quantities, and total amounts.  
+
+### Database Design Principles  
+- **Normalization**: The schema minimizes redundancy by separating customer, product, and purchase data.  
+- **Efficient Querying**: Relationships between tables (via foreign keys) allow for fast and structured data retrieval.  
+- **Behavioral Analysis**: The structure supports tracking customer purchases, product popularity, and sales trends.  
+
+### Key Relationships  
+- Each **Customer** can make multiple **Purchases** (one-to-many).  
+- Each **Product** can appear in multiple **Purchases** (one-to-many).  
+- The **Purchases** table acts as a junction, connecting **Customers** and **Products** with additional transaction details.  
+
+This design ensures data integrity while enabling comprehensive analysis of shopping behavior.  
+
+# Customer Shopping Database
+
+## 2. Entities and Attributes
+
+The three primary entities in the database are described below:
+
+### Customers  
+Stores the demographic details of each customer.  
+
+**Attributes:**  
+- `customer_id` (Primary Key)  
+- `age`  
+- `gender`  
+- `location`  
+
+### Products  
+Stores details about the products available for purchase.  
+
+**Attributes:**  
+- `product_id` (Primary Key)  
+- `item_name`  
+- `category`  
+- `size`  
+- `color`  
+- `season`  
+
+### Purchases  
+Records each purchase made by a customer, including transaction specifics.  
+
+**Attributes:**  
+- `purchase_id` (Primary Key)  
+- `customer_id` (Foreign Key referencing `Customers`)  
+- `product_id` (Foreign Key referencing `Products`)  
+- `purchase_amount`  
+- `review_rating`  
+- `payment_method`  
+- `shipping_type`  
+- `discount_applied`  
+- `promo_code_used`  
+- `subscription_status`  
+- `previous_purchases`  
+- `purchase_frequency`  
+
+## 3. Relationships Between Entities
+
+### Customer-to-Purchase Relationship  
+- **Type**: One-to-Many (1:M)  
+- **Description**: A customer can make multiple purchases, but each purchase is made by only one customer.  
+
+### Product-to-Purchase Relationship  
+- **Type**: One-to-Many (1:M)  
+- **Description**: A product can appear in multiple purchases, but each purchase only involves one product.  
+
+**Design Rationale**:  
+These relationships ensure that:  
+1. Each transaction is uniquely linked to a specific customer and product.  
+2. Customer and product data remain normalized (stored only once).  
+3. Redundancy is minimized while maintaining query efficiency.  
+
+## Entity-Relationship Diagram (Chen Notation)
+
+The Chen Diagram visually represents the entities and their relationships. It highlights the Customers, Products, and Purchases entities, with their respective attributes and the relationships between them.
+
+```{mermaid}
+erDiagram
+    CUSTOMER {
+        INT customer_id PK
+        INT age
+        VARCHAR gender
+        VARCHAR location
+    }
+    
+    PRODUCT {
+        INT product_id PK
+        VARCHAR item_name
+        VARCHAR category
+        VARCHAR size
+        VARCHAR color
+        VARCHAR season
+    }
+    
+    PURCHASE {
+        INT purchase_id PK
+        INT customer_id FK
+        INT product_id FK
+        DECIMAL purchase_amount
+        DECIMAL review_rating
+        VARCHAR payment_method
+        VARCHAR shipping_type
+        BOOLEAN discount_applied
+        BOOLEAN promo_code_used
+        BOOLEAN subscription_status
+        INT previous_purchases
+        VARCHAR purchase_frequency
+    }
+    
+    CUSTOMER ||--o{ PURCHASE : "makes"
+    PRODUCT ||--o{ PURCHASE : "included_in"
+```
+
+## Crow’s Foot Diagram
+
+The Crow's Foot Diagram highlights the entities, attributes, and the cardinality and participation of the relationships between the core entities: Customers, Products, and Purchases.
+
+```{mermaid}
+erDiagram
+    CUSTOMER ||--o{ PURCHASE : makes
+    PRODUCT ||--o{ PURCHASE : included_in
+    PURCHASE ||--|| PAYMENTMETHOD : uses
+    CUSTOMER ||--|| FREQUENCY : has
+    
+    CUSTOMER {
+        int CustomerID PK
+        int Age
+        string Gender
+        string SubscriptionStatus
+    }
+
+    PRODUCT {
+        string ItemPurchased PK
+        string Category
+        string Size
+        string Color
+        string Season
+        float ReviewRating
+    }
+
+    PURCHASE {
+        int CustomerID FK
+        string ItemPurchased FK
+        float PurchaseAmountUSD
+        string Location
+        string PaymentMethod FK
+        string ShippingType
+        float DiscountApplied
+        string PromoCodeUsed
+    }
+
+    PAYMENTMETHOD {
+        string PaymentMethod PK
+    }
+
+    FREQUENCY {
+        int FrequencyOfPurchases PK
+        int PreviousPurchases
+    }
+```
+
+## SQL Schema Creation
+
+The following SQL script creates the schema for the Shopping Trends Database used in HW3:
+
+# Database Schema
+
+![Database schema](HW5/carbon.png)
+
+## Sample Data Insertion (15 Records)
+
+![Insertion of data](HW5/carbon1.png)
+
+## Python-Generated Table Structures and Sample Data
+
+This section contains Python-generated listings of SQL tables and fields, along with sample data.
+
+![Sample data](HW5/carbon2.png)
+
+## Sample Data (First 5 Rows)
+Here is the Python code to load and display the first 5 rows of the Purchases, Customers tables.
+
+![Sample data](HW5/carbon3.png)
+
+Output:
+Customers Table (Top 5 Rows)
+
+![Customers table](HW5/carbon4.png)
+
+Products Table (Top 5 Rows)
+
+![Products table](HW5/carbon5.png)
+

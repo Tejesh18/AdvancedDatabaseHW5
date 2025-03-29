@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tejesh Annavarapu">
+<meta name="author" content="Srujan Katukam">
+<meta name="author" content="Anumandla Muralidhar Reddy">
+<meta name="author" content="Ajaykumar Reddy Rachala">
+
+<title>HW5 - Getting started with SQL</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Databases_HW5_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Databases_HW5_files/libs/quarto-html/quarto.js"></script>
+<script src="Databases_HW5_files/libs/quarto-html/popper.min.js"></script>
+<script src="Databases_HW5_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Databases_HW5_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Databases_HW5_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Databases_HW5_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Databases_HW5_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Databases_HW5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Databases_HW5_files/libs/bootstrap/bootstrap-8a79a254b8e706d3c925cde0a310d4f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="Databases_HW5_files/libs/quarto-diagram/mermaid.min.js"></script>
+<script src="Databases_HW5_files/libs/quarto-diagram/mermaid-init.js"></script>
+<link href="Databases_HW5_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#cmsc-608---advanced-database" id="toc-cmsc-608---advanced-database" class="nav-link active" data-scroll-target="#cmsc-608---advanced-database"><strong>CMSC 608 - Advanced Database</strong></a>
+  <ul class="collapse">
+  <li><a href="#instructor-thomas-gyeera" id="toc-instructor-thomas-gyeera" class="nav-link" data-scroll-target="#instructor-thomas-gyeera"><strong>Instructor:</strong> Thomas Gyeera</a></li>
+  <li><a href="#github-repository" id="toc-github-repository" class="nav-link" data-scroll-target="#github-repository"><strong>GitHub Repository</strong></a></li>
+  </ul></li>
+  <li><a href="#customer-shopping-database" id="toc-customer-shopping-database" class="nav-link" data-scroll-target="#customer-shopping-database">Customer Shopping Database</a>
+  <ul class="collapse">
+  <li><a href="#general-description-of-the-database" id="toc-general-description-of-the-database" class="nav-link" data-scroll-target="#general-description-of-the-database">1. General Description of the Database</a>
+  <ul class="collapse">
+  <li><a href="#database-design-principles" id="toc-database-design-principles" class="nav-link" data-scroll-target="#database-design-principles">Database Design Principles</a></li>
+  <li><a href="#key-relationships" id="toc-key-relationships" class="nav-link" data-scroll-target="#key-relationships">Key Relationships</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#customer-shopping-database-1" id="toc-customer-shopping-database-1" class="nav-link" data-scroll-target="#customer-shopping-database-1">Customer Shopping Database</a>
+  <ul class="collapse">
+  <li><a href="#entities-and-attributes" id="toc-entities-and-attributes" class="nav-link" data-scroll-target="#entities-and-attributes">2. Entities and Attributes</a>
+  <ul class="collapse">
+  <li><a href="#customers" id="toc-customers" class="nav-link" data-scroll-target="#customers">Customers</a></li>
+  <li><a href="#products" id="toc-products" class="nav-link" data-scroll-target="#products">Products</a></li>
+  <li><a href="#purchases" id="toc-purchases" class="nav-link" data-scroll-target="#purchases">Purchases</a></li>
+  </ul></li>
+  <li><a href="#relationships-between-entities" id="toc-relationships-between-entities" class="nav-link" data-scroll-target="#relationships-between-entities">3. Relationships Between Entities</a>
+  <ul class="collapse">
+  <li><a href="#customer-to-purchase-relationship" id="toc-customer-to-purchase-relationship" class="nav-link" data-scroll-target="#customer-to-purchase-relationship">Customer-to-Purchase Relationship</a></li>
+  <li><a href="#product-to-purchase-relationship" id="toc-product-to-purchase-relationship" class="nav-link" data-scroll-target="#product-to-purchase-relationship">Product-to-Purchase Relationship</a></li>
+  </ul></li>
+  <li><a href="#entity-relationship-diagram-chen-notation" id="toc-entity-relationship-diagram-chen-notation" class="nav-link" data-scroll-target="#entity-relationship-diagram-chen-notation">Entity-Relationship Diagram (Chen Notation)</a></li>
+  <li><a href="#crows-foot-diagram" id="toc-crows-foot-diagram" class="nav-link" data-scroll-target="#crows-foot-diagram">Crow’s Foot Diagram</a></li>
+  <li><a href="#sql-schema-creation" id="toc-sql-schema-creation" class="nav-link" data-scroll-target="#sql-schema-creation">SQL Schema Creation</a></li>
+  </ul></li>
+  <li><a href="#database-schema" id="toc-database-schema" class="nav-link" data-scroll-target="#database-schema">Database Schema</a>
+  <ul class="collapse">
+  <li><a href="#sample-data-insertion-15-records" id="toc-sample-data-insertion-15-records" class="nav-link" data-scroll-target="#sample-data-insertion-15-records">Sample Data Insertion (15 Records)</a></li>
+  <li><a href="#python-generated-table-structures-and-sample-data" id="toc-python-generated-table-structures-and-sample-data" class="nav-link" data-scroll-target="#python-generated-table-structures-and-sample-data">Python-Generated Table Structures and Sample Data</a></li>
+  <li><a href="#sample-data-first-5-rows" id="toc-sample-data-first-5-rows" class="nav-link" data-scroll-target="#sample-data-first-5-rows">Sample Data (First 5 Rows)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HW5 - Getting started with SQL</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tejesh Annavarapu </p>
+             <p>Srujan Katukam </p>
+             <p>Anumandla Muralidhar Reddy </p>
+             <p>Ajaykumar Reddy Rachala </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="cmsc-608---advanced-database" class="level1">
+<h1><strong>CMSC 608 - Advanced Database</strong></h1>
+<section id="instructor-thomas-gyeera" class="level3">
+<h3 class="anchored" data-anchor-id="instructor-thomas-gyeera"><strong>Instructor:</strong> Thomas Gyeera</h3>
+</section>
+<section id="github-repository" class="level2">
+<h2 class="anchored" data-anchor-id="github-repository"><strong>GitHub Repository</strong></h2>
+<p>👉 <strong><a href="https://github.com/Tejesh18/AdvancedDatabaseHW5">AdvancedDatabaseHW5 Repository</a></strong></p>
+</section>
+</section>
+<section id="customer-shopping-database" class="level1">
+<h1>Customer Shopping Database</h1>
+<section id="general-description-of-the-database" class="level2">
+<h2 class="anchored" data-anchor-id="general-description-of-the-database">1. General Description of the Database</h2>
+<p>The <code>Customer_shopping</code> database is designed to store and manage data for a customer shopping system. It includes three core entities:</p>
+<ol type="1">
+<li><strong>Customers</strong>: Stores demographic information about each customer, such as name, email, and join date.<br>
+</li>
+<li><strong>Products</strong>: Contains details about available products, including name, price, category, and description.<br>
+</li>
+<li><strong>Purchases</strong>: Records transactional data, linking customers to the products they buy, along with purchase dates, quantities, and total amounts.</li>
+</ol>
+<section id="database-design-principles" class="level3">
+<h3 class="anchored" data-anchor-id="database-design-principles">Database Design Principles</h3>
+<ul>
+<li><strong>Normalization</strong>: The schema minimizes redundancy by separating customer, product, and purchase data.<br>
+</li>
+<li><strong>Efficient Querying</strong>: Relationships between tables (via foreign keys) allow for fast and structured data retrieval.<br>
+</li>
+<li><strong>Behavioral Analysis</strong>: The structure supports tracking customer purchases, product popularity, and sales trends.</li>
+</ul>
+</section>
+<section id="key-relationships" class="level3">
+<h3 class="anchored" data-anchor-id="key-relationships">Key Relationships</h3>
+<ul>
+<li>Each <strong>Customer</strong> can make multiple <strong>Purchases</strong> (one-to-many).<br>
+</li>
+<li>Each <strong>Product</strong> can appear in multiple <strong>Purchases</strong> (one-to-many).<br>
+</li>
+<li>The <strong>Purchases</strong> table acts as a junction, connecting <strong>Customers</strong> and <strong>Products</strong> with additional transaction details.</li>
+</ul>
+<p>This design ensures data integrity while enabling comprehensive analysis of shopping behavior.</p>
+</section>
+</section>
+</section>
+<section id="customer-shopping-database-1" class="level1">
+<h1>Customer Shopping Database</h1>
+<section id="entities-and-attributes" class="level2">
+<h2 class="anchored" data-anchor-id="entities-and-attributes">2. Entities and Attributes</h2>
+<p>The three primary entities in the database are described below:</p>
+<section id="customers" class="level3">
+<h3 class="anchored" data-anchor-id="customers">Customers</h3>
+<p>Stores the demographic details of each customer.</p>
+<p><strong>Attributes:</strong><br>
+- <code>customer_id</code> (Primary Key)<br>
+- <code>age</code><br>
+- <code>gender</code><br>
+- <code>location</code></p>
+</section>
+<section id="products" class="level3">
+<h3 class="anchored" data-anchor-id="products">Products</h3>
+<p>Stores details about the products available for purchase.</p>
+<p><strong>Attributes:</strong><br>
+- <code>product_id</code> (Primary Key)<br>
+- <code>item_name</code><br>
+- <code>category</code><br>
+- <code>size</code><br>
+- <code>color</code><br>
+- <code>season</code></p>
+</section>
+<section id="purchases" class="level3">
+<h3 class="anchored" data-anchor-id="purchases">Purchases</h3>
+<p>Records each purchase made by a customer, including transaction specifics.</p>
+<p><strong>Attributes:</strong><br>
+- <code>purchase_id</code> (Primary Key)<br>
+- <code>customer_id</code> (Foreign Key referencing <code>Customers</code>)<br>
+- <code>product_id</code> (Foreign Key referencing <code>Products</code>)<br>
+- <code>purchase_amount</code><br>
+- <code>review_rating</code><br>
+- <code>payment_method</code><br>
+- <code>shipping_type</code><br>
+- <code>discount_applied</code><br>
+- <code>promo_code_used</code><br>
+- <code>subscription_status</code><br>
+- <code>previous_purchases</code><br>
+- <code>purchase_frequency</code></p>
+</section>
+</section>
+<section id="relationships-between-entities" class="level2">
+<h2 class="anchored" data-anchor-id="relationships-between-entities">3. Relationships Between Entities</h2>
+<section id="customer-to-purchase-relationship" class="level3">
+<h3 class="anchored" data-anchor-id="customer-to-purchase-relationship">Customer-to-Purchase Relationship</h3>
+<ul>
+<li><strong>Type</strong>: One-to-Many (1:M)<br>
+</li>
+<li><strong>Description</strong>: A customer can make multiple purchases, but each purchase is made by only one customer.</li>
+</ul>
+</section>
+<section id="product-to-purchase-relationship" class="level3">
+<h3 class="anchored" data-anchor-id="product-to-purchase-relationship">Product-to-Purchase Relationship</h3>
+<ul>
+<li><strong>Type</strong>: One-to-Many (1:M)<br>
+</li>
+<li><strong>Description</strong>: A product can appear in multiple purchases, but each purchase only involves one product.</li>
+</ul>
+<p><strong>Design Rationale</strong>:<br>
+These relationships ensure that:<br>
+1. Each transaction is uniquely linked to a specific customer and product.<br>
+2. Customer and product data remain normalized (stored only once).<br>
+3. Redundancy is minimized while maintaining query efficiency.</p>
+</section>
+</section>
+<section id="entity-relationship-diagram-chen-notation" class="level2">
+<h2 class="anchored" data-anchor-id="entity-relationship-diagram-chen-notation">Entity-Relationship Diagram (Chen Notation)</h2>
+<p>The Chen Diagram visually represents the entities and their relationships. It highlights the Customers, Products, and Purchases entities, with their respective attributes and the relationships between them.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    CUSTOMER {
+        INT customer_id PK
+        INT age
+        VARCHAR gender
+        VARCHAR location
+    }
+    
+    PRODUCT {
+        INT product_id PK
+        VARCHAR item_name
+        VARCHAR category
+        VARCHAR size
+        VARCHAR color
+        VARCHAR season
+    }
+    
+    PURCHASE {
+        INT purchase_id PK
+        INT customer_id FK
+        INT product_id FK
+        DECIMAL purchase_amount
+        DECIMAL review_rating
+        VARCHAR payment_method
+        VARCHAR shipping_type
+        BOOLEAN discount_applied
+        BOOLEAN promo_code_used
+        BOOLEAN subscription_status
+        INT previous_purchases
+        VARCHAR purchase_frequency
+    }
+    
+    CUSTOMER ||--o{ PURCHASE : "makes"
+    PRODUCT ||--o{ PURCHASE : "included_in"
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="crows-foot-diagram" class="level2">
+<h2 class="anchored" data-anchor-id="crows-foot-diagram">Crow’s Foot Diagram</h2>
+<p>The Crow’s Foot Diagram highlights the entities, attributes, and the cardinality and participation of the relationships between the core entities: Customers, Products, and Purchases.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">erDiagram
+    CUSTOMER ||--o{ PURCHASE : makes
+    PRODUCT ||--o{ PURCHASE : included_in
+    PURCHASE ||--|| PAYMENTMETHOD : uses
+    CUSTOMER ||--|| FREQUENCY : has
+    
+    CUSTOMER {
+        int CustomerID PK
+        int Age
+        string Gender
+        string SubscriptionStatus
+    }
+
+    PRODUCT {
+        string ItemPurchased PK
+        string Category
+        string Size
+        string Color
+        string Season
+        float ReviewRating
+    }
+
+    PURCHASE {
+        int CustomerID FK
+        string ItemPurchased FK
+        float PurchaseAmountUSD
+        string Location
+        string PaymentMethod FK
+        string ShippingType
+        float DiscountApplied
+        string PromoCodeUsed
+    }
+
+    PAYMENTMETHOD {
+        string PaymentMethod PK
+    }
+
+    FREQUENCY {
+        int FrequencyOfPurchases PK
+        int PreviousPurchases
+    }
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="sql-schema-creation" class="level2">
+<h2 class="anchored" data-anchor-id="sql-schema-creation">SQL Schema Creation</h2>
+<p>The following SQL script creates the schema for the Shopping Trends Database used in HW3:</p>
+</section>
+</section>
+<section id="database-schema" class="level1">
+<h1>Database Schema</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon.png" class="img-fluid figure-img"></p>
+<figcaption>Database schema</figcaption>
+</figure>
+</div>
+<section id="sample-data-insertion-15-records" class="level2">
+<h2 class="anchored" data-anchor-id="sample-data-insertion-15-records">Sample Data Insertion (15 Records)</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon1.png" class="img-fluid figure-img"></p>
+<figcaption>Insertion of data</figcaption>
+</figure>
+</div>
+</section>
+<section id="python-generated-table-structures-and-sample-data" class="level2">
+<h2 class="anchored" data-anchor-id="python-generated-table-structures-and-sample-data">Python-Generated Table Structures and Sample Data</h2>
+<p>This section contains Python-generated listings of SQL tables and fields, along with sample data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon2.png" class="img-fluid figure-img"></p>
+<figcaption>Sample data</figcaption>
+</figure>
+</div>
+</section>
+<section id="sample-data-first-5-rows" class="level2">
+<h2 class="anchored" data-anchor-id="sample-data-first-5-rows">Sample Data (First 5 Rows)</h2>
+<p>Here is the Python code to load and display the first 5 rows of the Purchases, Customers tables.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon3.png" class="img-fluid figure-img"></p>
+<figcaption>Sample data</figcaption>
+</figure>
+</div>
+<p>Output: Customers Table (Top 5 Rows)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon4.png" class="img-fluid figure-img"></p>
+<figcaption>Customers table</figcaption>
+</figure>
+</div>
+<p>Products Table (Top 5 Rows)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW5/carbon5.png" class="img-fluid figure-img"></p>
+<figcaption>Products table</figcaption>
+</figure>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
